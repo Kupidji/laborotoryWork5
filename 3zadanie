@@ -1,0 +1,71 @@
+// 3. Создать с помощью контейнера map список абитуриентов (фамилия-сумма баллов).
+// Данные считывать из текстового файла. Вывести на экран весь список. Вывести оценку
+// указанного студента (по фамилии). Удалить из списка данного студента и снова вывести список на экран.
+
+#include <map>
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+string getName(string str) {
+	return str.substr(0, str.length() - 1);
+}
+
+string getMark(string str) {
+	return str.substr(str.length() - 1, str.length());
+}
+
+void main() {
+	int n = 0;
+	string mapStr, getStr;
+	ofstream file1;
+	ifstream file2;
+	map<string, int> myMap;
+	
+	setlocale(LC_ALL, "Rus");
+
+	cout << "Заполняем файл, какое кол-во человек вы хотите вписать? - ";
+	cin >> n;
+
+	file1.open("Example.txt");
+	cout << "Заполните map по шаблону - Имя:Оценка. Пример - Кирилл5 \n";
+	for (int i = 0; i < n; i++) {
+		cout << i + 1 << ") ";
+		cin >> mapStr;
+		file1 << mapStr << endl;
+		mapStr = "";
+	}
+	file1.close();
+
+	file2.open("Example.txt");
+
+	while (!file2.eof()) { 
+		getline(file2, getStr);
+		if (getStr != "") myMap[getName(getStr)] = stoi(getMark(getStr));
+	}
+
+	file2.close();
+	 
+	cout << endl;
+
+	for (auto it = myMap.begin(); it != myMap.end(); it++) {
+		cout << it->first << ' ' << it->second << '\n';
+	}
+	cout << "Кого удалим? - ";
+	int pos = 0;
+	cin >> pos;
+
+	auto it2 = myMap.begin();
+	for (int i = 0; i < pos; i++) {
+		it2++;
+	}
+	myMap.erase(it2);
+
+	for (auto it = myMap.begin(); it != myMap.end(); it++) {
+		cout << it->first << ' ' << it->second << '\n';
+	}
+
+
+}
